@@ -8,9 +8,12 @@ public class ShuttleCollisionHandler : MonoBehaviour
     [SerializeField] private Animator _cameraAnimator;
 
     private Shuttle _shuttle;
+    private int _triggerHash;
+    private string _triggerName = "Crashed";
 
     private void Start()
     {
+        _triggerHash = Animator.StringToHash(_triggerName);
         _shuttle = GetComponent<Shuttle>();
     }
 
@@ -18,7 +21,7 @@ public class ShuttleCollisionHandler : MonoBehaviour
     {
         if (!collision.TryGetComponent(out BlueLazer Laser))
         {
-            _cameraAnimator.SetTrigger("Crashed");
+            _cameraAnimator.SetTrigger(_triggerHash);
             _shuttle.Die();
         }
     }

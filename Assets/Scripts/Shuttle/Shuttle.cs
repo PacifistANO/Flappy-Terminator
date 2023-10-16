@@ -29,6 +29,6 @@ public class Shuttle : MonoBehaviour
 
     public void Die()
     {
-        Invoke("InvokeDie", _invokeTime);
+        Invoke(nameof(InvokeDie), _invokeTime);
     }
 }

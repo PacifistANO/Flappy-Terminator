@@ -5,32 +5,49 @@ using UnityEngine;
 public class EnemyShooter : Pool
 {
     [SerializeField] private RedLazer _lazer;
-    [SerializeField] private Enemy _enemy;
     [SerializeField] private float _timeBeforeShoot;
 
-    private float _elapsedTime;
+    private bool _isShooting;
 
-    private void Start()
+    private void OnEnable()
     {
-        Initialize(_lazer.gameObject);
+        StartCoroutine(BulletShooting());
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        _elapsedTime += Time.deltaTime;
+        StopCoroutine(BulletShooting());
+    }
 
-        if (_elapsedTime >= _timeBeforeShoot)
+    private void Awake()
+    {
+        _isShooting = true;
+        Initialize(_lazer.gameObject);
+        StartCoroutine(BulletShooting());
+    }
+
+    private IEnumerator BulletShooting()
+    {
+        var waitingTime = new WaitForSeconds(_timeBeforeShoot);
+
+        while (_isShooting)
         {
             if (TryGetObstacle(out GameObject obstacle))
             {
-                _elapsedTime = 0;
-
                 obstacle.gameObject.SetActive(true);
                 obstacle.transform.position = transform.position;
-            }
-        }
 
-        DisableObstaclesAbroadView();
+                yield return waitingTime;
+            }
+
+            DisableObstaclesAbroadView();
+        }
+    }
+
+    public void EndShooting()
+    {
+        Debug.Log("EndShooting");
+        _isShooting = false;
     }
 
 }

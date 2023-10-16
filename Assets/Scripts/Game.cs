@@ -37,6 +37,7 @@ public class Game : MonoBehaviour
 
     private void OnRestartButtonClick()
     {
+        _generator.EndGenerate();
         _gameOverScreen.Close();
     }
 
